@@ -14,7 +14,7 @@ Ensure you have the following installed:
 
 ### 2. Clone the Repository
 Clone the project from the repository:
-```sh
+sh
 git clone <your-repo-url>
 cd <your-project-folder>
 ```
@@ -118,7 +118,3 @@ If you encounter issues, try the following steps:
 - **Verify assets:**  
   Ensure that the `assets/svg/` directory exists and contains the required icons.
 ```
-
----
-
-### ✅ Now you can save this file as `README.md` in your project repository and push it to GitHub. It will be correctly formatted and easy to read. 🚀
