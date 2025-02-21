@@ -20,6 +20,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
   final TextEditingController emailController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
 
+  // Email validation regex pattern
+  final emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+
   Future<void> _pickImage() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -31,7 +34,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   Widget _buildImagePicker(double width, double height) {
     return DottedBorder(
-      color: Colors.black, 
+      color: Colors.black,
       strokeWidth: 1,
       dashPattern: [6, 3],
       borderType: BorderType.RRect,
@@ -105,6 +108,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     TextInputType keyboardType = TextInputType.text,
     bool isRequired = true,
     Widget? prefix,
+    String? Function(String?)? customValidator,
   }) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -174,14 +178,15 @@ class _UpdateProfileState extends State<UpdateProfile> {
               filled: true,
               fillColor: Colors.white,
             ),
-            validator: isRequired
-                ? (value) {
-                    if (value == null || value.isEmpty) {
-                      return "$label is required";
-                    }
-                    return null;
-                  }
-                : null,
+            validator: customValidator ??
+                (isRequired
+                    ? (value) {
+                        if (value == null || value.isEmpty) {
+                          return "$label is required";
+                        }
+                        return null;
+                      }
+                    : null),
           ),
         ),
       ],
@@ -226,7 +231,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.grey[80],
+      backgroundColor: Colors.grey[50],
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.08),
         child: AppBar(
@@ -248,50 +253,61 @@ class _UpdateProfileState extends State<UpdateProfile> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Expanded(
-                child: SingleChildScrollView(
-                  child: Container(
-                    padding: EdgeInsets.all(15),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(15),
-                    ),
-                    width: width,
-                    child: Form(
-                      key: _formKey,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Profile photo',
-                            style: TextStyle(
-                              fontSize: width * 0.035,
-                              fontWeight: FontWeight.w500,
-                              color: Colors.black87,
-                            ),
-                          ),
-                          SizedBox(height: height * 0.025),
-                          _buildImagePicker(width, height),
-                          SizedBox(height: height * 0.025),
-                          _buildTextField(
-                            label: 'Full name',
-                            controller: fullNameController,
-                            width: width,
-                            hintText: "Kweku Asante",
-                          ),
-                          SizedBox(height: height * 0.025),
-                          _buildPhoneField(width),
-                          SizedBox(height: height * 0.025),
-                          _buildTextField(
-                            label: 'Email',
-                            controller: emailController,
-                            width: width,
-                            hintText: "kweku@mailinator.com",
-                            keyboardType: TextInputType.emailAddress,
-                          ),
-                        ],
+              Container(
+                padding: EdgeInsets.all(15),
+                decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(15),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 10,
+                        offset: const Offset(0, 2),
                       ),
-                    ),
+                    ]),
+                width: width,
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Profile photo',
+                        style: TextStyle(
+                          fontSize: width * 0.035,
+                          fontWeight: FontWeight.w500,
+                          color: Colors.black87,
+                        ),
+                      ),
+                      SizedBox(height: height * 0.025),
+                      _buildImagePicker(width, height),
+                      SizedBox(height: height * 0.025),
+                      _buildTextField(
+                        label: 'Full name',
+                        controller: fullNameController,
+                        width: width,
+                        hintText: "Kweku Asante",
+                      ),
+                      SizedBox(height: height * 0.025),
+                      _buildPhoneField(width),
+                      SizedBox(height: height * 0.025),
+                      _buildTextField(
+                        label: 'Email',
+                        controller: emailController,
+                        width: width,
+                        hintText: "kweku@mailinator.com",
+                        keyboardType: TextInputType.emailAddress,
+                        customValidator: (value) {
+                          if (value == null || value.isEmpty) {
+                            return 'Email is required';
+                          }
+                          if (!emailRegex.hasMatch(value)) {
+                            return 'Please enter a valid email address';
+                          }
+                          return null;
+                        },
+                      ),
+                    ],
                   ),
                 ),
               ),
@@ -314,7 +330,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     );
                   } else {
                     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                      content: Text("Please fill al required fields"),
+                      content: Text("Please fill all required fields"),
                       backgroundColor: Colors.red,
                     ));
                   }
@@ -326,8 +342,10 @@ class _UpdateProfileState extends State<UpdateProfile> {
                     borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                child: const Text("Save changes",
-                    style: TextStyle(color: Colors.white, fontSize: 20)),
+                child: const Text(
+                  "Save changes",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
               ),
             ],
           ),
