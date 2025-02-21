@@ -16,37 +16,64 @@ class ApiService {
   }) async {
     String url = "https://fixit-testing.tuulbox.app/api/accounts/$userId/";
 
-    final response = await http.patch(
-      Uri.parse(url),
-      headers: {
-        "Content-Type": "application/json",
-        "Authorization": "Bearer $token",
-      },
-      body: jsonEncode({
-        "firstname": firstName,
-        "lastname": lastName,
-        "address": address,
-        "phoneNumber": phoneNumber
-      }),
-    );
-
-    if (response.statusCode == 200) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text("Profile updated successfully!"),
-          backgroundColor: Colors.green,
-        ),
+    try {
+      final response = await http.patch(
+        Uri.parse(url),
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+        body: jsonEncode({
+          "firstname": firstName,
+          "lastname": lastName,
+          "address": address,
+          "phoneNumber": phoneNumber
+        }),
       );
-      print("Profile updated successfully: ${response.body}");
-    } else {
+
+      if (response.statusCode == 200) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("Profile updated successfully!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        print("Profile updated successfully: ${response.body}");
+      } else {
+        _showErrorMessage(context, response);
+      }
+    } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content:
-              Text("Failed to update profile. Error: ${response.reasonPhrase}"),
+              Text("An error occurred. Please check your internet connection."),
           backgroundColor: Colors.red,
         ),
       );
-      print("Error ${response.statusCode}: ${response.body}");
+      print("Network error: $e");
     }
+  }
+
+  void _showErrorMessage(BuildContext context, http.Response response) {
+    String errorMessage = "Failed to update profile.";
+    try {
+      final Map<String, dynamic> errorBody = jsonDecode(response.body);
+      if (errorBody.containsKey('message')) {
+        errorMessage = errorBody['message'];
+      } else if (errorBody.containsKey('error')) {
+        errorMessage = errorBody['error'];
+      }
+    } catch (e) {
+      errorMessage += " Please try again.";
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+            "$errorMessage (Error: ${response.statusCode} - ${response.reasonPhrase})"),
+        backgroundColor: Colors.red,
+      ),
+    );
+    print("Error ${response.statusCode}: ${response.body}");
   }
 }
