@@ -31,9 +31,9 @@ class _UpdateProfileState extends State<UpdateProfile> {
 
   Widget _buildImagePicker(double width, double height) {
     return DottedBorder(
-      color: Colors.black, // Dotted border color
+      color: Colors.black, 
       strokeWidth: 1,
-      dashPattern: [6, 3], // Pattern of the dotted border
+      dashPattern: [6, 3],
       borderType: BorderType.RRect,
       radius: const Radius.circular(16),
       child: Container(
@@ -153,7 +153,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
               ),
               hintText: hintText,
               hintStyle: TextStyle(
-                color: Colors.grey[500], // Light color for hint text
+                color: Colors.grey[500],
                 fontWeight: FontWeight.w400,
               ),
               border: OutlineInputBorder(
