@@ -8,7 +8,7 @@ Ensure you have the following installed:
 - Xcode (if developing for iOS)
 - A real or virtual device (Emulator/Simulator)
 - An API key stored in a `.env` file
-- 
+  
 2. Clone the Repository
 clone the project from the repository:
 git clone &lt;your-repo-url&gt;
@@ -43,6 +43,7 @@ lib/
 │ ├── update_profile.dart # Profile update screen
 assets/
 │-- svg/ # SVG icons
+
 .env # Stores environment variables
 pubspec.yaml # Dependencies &amp; project metadata
 
