@@ -193,6 +193,37 @@ class _UpdateProfileState extends State<UpdateProfile> {
     );
   }
 
+  // Widget _buildPhoneField(double width) {
+  //   return _buildTextField(
+  //     label: 'Phone number',
+  //     controller: phoneNumberController,
+  //     width: width,
+  //     hintText: "0244123456",
+  //     keyboardType: TextInputType.phone,
+  //     prefix: Container(
+  //       padding: EdgeInsets.symmetric(
+  //         horizontal: width * 0.04,
+  //         vertical: width * 0.03,
+  //       ),
+  //       margin: EdgeInsets.only(right: width * 0.02),
+  //       decoration: BoxDecoration(
+  //         border: Border(
+  //           right: BorderSide(
+  //             color: Colors.grey[300]!,
+  //             width: 1,
+  //           ),
+  //         ),
+  //       ),
+  //       child: Text(
+  //         '+233',
+  //         style: TextStyle(
+  //           fontSize: width * 0.035,
+  //           color: Colors.black87,
+  //         ),
+  //       ),
+  //     ),
+  //   );
+  // }
   Widget _buildPhoneField(double width) {
     return _buildTextField(
       label: 'Phone number',
@@ -214,12 +245,23 @@ class _UpdateProfileState extends State<UpdateProfile> {
             ),
           ),
         ),
-        child: Text(
-          '+233',
-          style: TextStyle(
-            fontSize: width * 0.035,
-            color: Colors.black87,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              '+233',
+              style: TextStyle(
+                fontSize: width * 0.035,
+                color: Colors.black87,
+              ),
+            ),
+            SizedBox(width: 4),
+            Icon(
+              Icons.keyboard_arrow_down,
+              size: width * 0.06,
+              color: Colors.black87,
+            ),
+          ],
         ),
       ),
     );
