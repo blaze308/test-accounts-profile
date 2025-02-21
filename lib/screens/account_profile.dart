@@ -39,7 +39,7 @@ class AccountProfile extends StatelessWidget {
               child: Column(
                 children: [
                   CircleAvatar(
-                    backgroundColor: Colors.grey[700],
+                    backgroundColor: Color(0xffE0E0E0),
                     radius: width * 0.08,
                     child: Text(
                       "JL",
