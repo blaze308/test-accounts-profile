@@ -231,7 +231,7 @@ class _UpdateProfileState extends State<UpdateProfile> {
     final width = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Colors.grey[50],
+      backgroundColor: const Color(0xffF5F5F5),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(height * 0.08),
         child: AppBar(
